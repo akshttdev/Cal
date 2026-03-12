@@ -1,5 +1,5 @@
 import { prisma } from "../utils/prisma";
-import { Booking, BookingStatus } from "@prisma/client";
+import { BookingStatus, type Booking } from "../generated/prisma/client";
 
 const DEFAULT_USER_ID = process.env.DEFAULT_USER_ID!;
 
@@ -112,5 +112,11 @@ export async function cancelBooking(id: string): Promise<Booking> {
         data: {
             status: BookingStatus.CANCELLED,
         },
+    });
+}
+
+export async function deleteBooking(id: string): Promise<void> {
+    await prisma.booking.delete({
+        where: { id },
     });
 }

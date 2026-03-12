@@ -1,5 +1,5 @@
 import { prisma } from "../utils/prisma";
-import type { EventType } from "@prisma/client";
+import type { EventType } from "../generated/prisma/client";
 
 const DEFAULT_USER_ID = process.env.DEFAULT_USER_ID!;
 
@@ -94,8 +94,13 @@ export async function updateEventType(
 }
 
 export async function deleteEventType(id: string): Promise<void> {
-    await prisma.eventType.update({
-        where: { id },
-        data: { isActive: false },
+    await prisma.$transaction(async (tx) => {
+        await tx.booking.deleteMany({
+            where: { eventTypeId: id },
+        });
+
+        await tx.eventType.delete({
+            where: { id },
+        });
     });
 }

@@ -35,11 +35,20 @@ export const createBooking = async (req: Request, res: Response, next: NextFunct
     }
 };
 
-export const cancelBooking = async (req: Request, res: Response, next: NextFunction) => {
+export async function cancelBooking(req: Request, res: Response, next: NextFunction) {
     try {
         const booking = await bookingService.cancelBooking(req.params.id as string);
         res.json(booking);
     } catch (err) {
         next(err);
     }
-};
+}
+
+export async function deleteBooking(req: Request, res: Response, next: NextFunction) {
+    try {
+        await bookingService.deleteBooking(req.params.id as string);
+        res.status(204).send();
+    } catch (err) {
+        next(err);
+    }
+}
