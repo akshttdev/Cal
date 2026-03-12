@@ -94,7 +94,7 @@ export async function updateEventType(
 }
 
 export async function deleteEventType(id: string): Promise<void> {
-    await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx: any) => {
         await tx.booking.deleteMany({
             where: { eventTypeId: id },
         });

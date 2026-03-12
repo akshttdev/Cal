@@ -102,7 +102,7 @@ export async function getAvailableSlots(query: SlotQuery) {
         }
 
         const conflict = bookings.some(
-            (booking) =>
+            (booking: any) =>
                 slotStart < booking.endTime && slotEnd > booking.startTime
         );
 

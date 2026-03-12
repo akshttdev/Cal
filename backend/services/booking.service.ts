@@ -25,7 +25,7 @@ export async function createBooking(
     const startTime = new Date(input.startTime);
     const endTime = new Date(input.endTime);
 
-    return prisma.$transaction(async (tx) => {
+    return prisma.$transaction(async (tx: any) => {
         const conflicts = await tx.booking.findMany({
             where: {
                 eventTypeId: input.eventTypeId,
