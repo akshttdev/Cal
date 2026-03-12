@@ -44,7 +44,14 @@ export async function deleteEventType(id: string) {
     const res = await fetch(`${API}/event-types/${id}`, {
         method: "DELETE",
     });
-    if (!res.ok) throw new Error("Failed to delete event type");
+
+    if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text || "Failed to delete event type");
+    }
+
+    if (res.status === 204) return true;
+
     return res.json();
 }
 
