@@ -21,25 +21,20 @@ const allowedOrigins = [
     "https://cal-navy-two.vercel.app"
 ];
 
-app.use(
-    cors({
-        origin: (origin, callback) => {
-            // allow requests with no origin (server-to-server / curl)
-            if (!origin) return callback(null, true);
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("CORS not allowed"));
+        }
+    },
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true
+}));
 
-            if (allowedOrigins.includes(origin)) {
-                return callback(null, true);
-            }
-
-            return callback(new Error("Not allowed by CORS"));
-        },
-        methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-        allowedHeaders: ["Content-Type", "Authorization"],
-        credentials: true
-    })
-);
-
-app.options("*", cors());
+app.options("/*", cors());
 
 app.use(express.json());
 
