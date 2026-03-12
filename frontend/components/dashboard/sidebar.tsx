@@ -17,7 +17,13 @@ import {
     Gift,
     Settings,
     ChevronDown,
-    Search
+    Search,
+    Moon,
+    MapIcon,
+    HelpCircle,
+    Download,
+    ChevronRight,
+    LogOut
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -68,7 +74,7 @@ export function Sidebar() {
                 {profileOpen && (
                     <div className="absolute top-full left-0 right-0 mt-1 bg-[#1c1c1c] border border-[color:var(--border)] rounded-xl shadow-xl overflow-hidden py-2 animate-in fade-in slide-in-from-top-1 duration-100 flex flex-col min-w-[220px]">
                         <button className="flex items-center gap-3 px-4 py-2 text-sm text-[color:var(--muted-foreground)] hover:bg-[#2c2c2c] hover:text-white transition-colors text-left w-full">
-                            <User className="w-[18px] h-[18px]" /> My profile
+                            <Users className="w-[18px] h-[18px]" /> My profile
                         </button>
                         <button className="flex items-center gap-3 px-4 py-2 text-sm text-[color:var(--muted-foreground)] hover:bg-[#2c2c2c] hover:text-white transition-colors text-left w-full">
                             <Settings className="w-[18px] h-[18px]" /> My settings
