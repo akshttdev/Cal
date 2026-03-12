@@ -1,5 +1,5 @@
 import { prisma } from "../utils/prisma";
-import { BookingStatus, type Booking } from "../generated/prisma/client";
+import { BookingStatus, type Booking } from "@prisma/client";
 
 const DEFAULT_USER_ID = process.env.DEFAULT_USER_ID!;
 

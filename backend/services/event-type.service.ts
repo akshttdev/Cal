@@ -1,5 +1,5 @@
 import { prisma } from "../utils/prisma";
-import type { EventType } from "../generated/prisma/client";
+import type { EventType } from "@prisma/client";
 
 const DEFAULT_USER_ID = process.env.DEFAULT_USER_ID!;
 
