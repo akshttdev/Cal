@@ -23,7 +23,8 @@ import {
     HelpCircle,
     Download,
     ChevronRight,
-    LogOut
+    LogOut,
+    User
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 

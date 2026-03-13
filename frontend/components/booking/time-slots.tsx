@@ -33,7 +33,7 @@ export function TimeSlots({ slots, selectedSlot, onSelect, onConfirm, date }: Ti
                 </h3>
             </div>
 
-            <div className="flex-1 overflow-y-auto space-y-2 pr-2 custom-scrollbar">
+            <div className="flex-1 overflow-y-auto space-y-2 pr-2 custom-scrollbar max-h-[380px]">
                 {slots.map((s) => {
                     const isSelected = selectedSlot === s;
                     const isConfirming = confirmingSlot === s;

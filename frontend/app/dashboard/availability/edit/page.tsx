@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getAvailability, updateAvailability } from "@/lib/api";
+import { getAvailability, updateAvailability, updateTimezone } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, Copy, Plus, Trash } from "lucide-react";
@@ -25,6 +25,7 @@ export default function EditAvailabilityPage() {
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [availabilities, setAvailabilities] = useState<any[]>([]);
+    const [timezone, setTimezone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone);
 
     useEffect(() => {
         fetchAvailability();
@@ -32,15 +33,19 @@ export default function EditAvailabilityPage() {
 
     async function fetchAvailability() {
         try {
-            const data = await getAvailability();
+            const [data, userRes] = await Promise.all([
+                getAvailability(),
+                fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api"}/user`).then(r => r.ok ? r.json() : null).catch(() => null),
+            ]);
+            if (userRes?.timezone) setTimezone(userRes.timezone);
             const mapped = DAYS_OF_WEEK.map((_, index) => {
                 const existing = data.find((d: any) => d.dayOfWeek === index);
                 if (existing) return existing;
                 return {
                     dayOfWeek: index,
-                    startTime: "09:30",
+                    startTime: "09:00",
                     endTime: "17:00",
-                    isActive: index > 0 && index < 6, // Mon-Fri default
+                    isActive: index > 0 && index < 6,
                 };
             });
             setAvailabilities(mapped);
@@ -54,7 +59,9 @@ export default function EditAvailabilityPage() {
     async function handleSave() {
         setSaving(true);
         try {
-            await updateAvailability({ rules: availabilities });
+            await updateAvailability(availabilities);
+            // Save timezone separately — failure here doesn't block availability save
+            updateTimezone(timezone).catch(console.error);
             router.push("/dashboard/availability");
         } catch (err) {
             alert("Failed to update availability");
@@ -71,7 +78,7 @@ export default function EditAvailabilityPage() {
         });
     }
 
-    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
 
     if (loading) {
         return (
@@ -201,7 +208,8 @@ export default function EditAvailabilityPage() {
                         <div className="relative">
                             <select
                                 className="flex h-11 w-full rounded-md border border-[color:var(--input)] bg-[color:var(--background)] px-3 py-2 text-sm text-left ring-offset-[color:var(--background)] placeholder:text-[color:var(--muted-foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--ring)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 appearance-none pr-10"
-                                defaultValue={tz}
+                                value={timezone}
+                                onChange={(e) => setTimezone(e.target.value)}
                             >
                                 {ALL_TIMEZONES.map(z => <option key={z} value={z}>{z}</option>)}
                             </select>

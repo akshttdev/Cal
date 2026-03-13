@@ -13,6 +13,9 @@ interface EventTypeCardProps {
     isActive: boolean;
     onDelete?: (id: string) => void;
     onToggle?: (id: string, currentIsActive: boolean) => void;
+    onEdit?: () => void;
+    onDuplicate?: () => void;
+    onCopy?: () => void;
 }
 
 export function EventTypeCard({
@@ -22,7 +25,10 @@ export function EventTypeCard({
     slug,
     isActive,
     onDelete,
-    onToggle
+    onToggle,
+    onEdit,
+    onDuplicate,
+    onCopy
 }: EventTypeCardProps) {
     const [menuOpen, setMenuOpen] = useState(false);
     const [active, setActive] = useState(isActive);
@@ -51,7 +57,7 @@ export function EventTypeCard({
     }, []);
 
     return (
-        <div className="group flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-5 bg-[color:var(--card)] border border-[color:var(--border)] first:rounded-t-xl last:rounded-b-xl -mb-px hover:bg-[color:var(--accent)]/30 transition-colors relative">
+        <div className={`group flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-5 bg-[color:var(--card)] border border-[color:var(--border)] first:rounded-t-xl last:rounded-b-xl -mb-px hover:bg-[color:var(--accent)]/30 transition-colors relative ${menuOpen ? "z-50" : "z-0"}`}>
             <Link href={`/dashboard/event-types/edit/${id}`} className="flex-1 flex flex-col gap-2.5 cursor-pointer">
                 <div className="flex items-baseline gap-1.5">
                     <h3 className="text-[15px] font-semibold tracking-tight hover:underline">{title}</h3>
@@ -103,10 +109,10 @@ export function EventTypeCard({
                     {/* Custom Dropdown Menu */}
                     {menuOpen && (
                         <div className="absolute right-0 top-full mt-2 w-48 bg-[color:var(--card)] border border-[color:var(--border)] rounded-xl shadow-lg z-50 overflow-hidden py-1 text-sm font-medium animate-in fade-in slide-in-from-top-2 duration-100">
-                            <Link href={`/dashboard/event-types/edit/${id}`} className="w-full text-left px-4 py-2 hover:bg-[color:var(--accent)] flex items-center gap-2.5 cursor-pointer">
+                            <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); onEdit?.(); setMenuOpen(false); }} className="w-full text-left px-4 py-2 hover:bg-[color:var(--accent)] flex items-center gap-2.5 cursor-pointer">
                                 <Pen className="w-[15px] h-[15px] text-[color:var(--muted-foreground)]" /> Edit
-                            </Link>
-                            <button className="w-full text-left px-4 py-2 hover:bg-[color:var(--accent)] flex items-center gap-2.5">
+                            </button>
+                            <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); onDuplicate?.(); setMenuOpen(false); }} className="w-full text-left px-4 py-2 hover:bg-[color:var(--accent)] flex items-center gap-2.5">
                                 <Copy className="w-[15px] h-[15px] text-[color:var(--muted-foreground)]" /> Duplicate
                             </button>
                             <button className="w-full text-left px-4 py-2 hover:bg-[color:var(--accent)] flex items-center gap-2.5">

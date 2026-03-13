@@ -65,6 +65,21 @@ app.use("/api/availability", availabilityRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/public", publicRoutes);
 
+// Simple user info endpoint — returns the default user's timezone
+app.get("/api/user", async (_req, res) => {
+    const { prisma } = await import("./utils/prisma");
+    const DEFAULT_USER_ID = process.env.DEFAULT_USER_ID!;
+    try {
+        const user = await prisma.user.findUnique({
+            where: { id: DEFAULT_USER_ID },
+            select: { id: true, name: true, email: true, timezone: true },
+        });
+        res.json(user);
+    } catch {
+        res.status(500).json({ error: "Failed to fetch user" });
+    }
+});
+
 /*
 |--------------------------------------------------------------------------
 | 404 Handler

@@ -28,7 +28,7 @@ export async function createBooking(
     return prisma.$transaction(async (tx: any) => {
         const conflicts = await tx.booking.findMany({
             where: {
-                eventTypeId: input.eventTypeId,
+                eventType: { userId: DEFAULT_USER_ID },
                 status: BookingStatus.CONFIRMED,
                 startTime: { lt: endTime },
                 endTime: { gt: startTime },
@@ -41,14 +41,12 @@ export async function createBooking(
 
         return tx.booking.create({
             data: {
-                userId: DEFAULT_USER_ID,
                 eventTypeId: input.eventTypeId,
-                attendeeName: input.attendeeName,
-                attendeeEmail: input.attendeeEmail,
+                guestName: input.attendeeName,
+                guestEmail: input.attendeeEmail,
                 startTime,
                 endTime,
                 status: BookingStatus.CONFIRMED,
-                uid: crypto.randomUUID(),
             },
         });
     });

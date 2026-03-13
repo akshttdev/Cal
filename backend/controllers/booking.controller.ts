@@ -8,6 +8,7 @@ export const listBookings = async (req: Request, res: Response, next: NextFuncti
         const bookings = await bookingService.listBookings(filter);
         res.json(bookings);
     } catch (err) {
+        console.error("[Booking Controller] listBookings Error:", err);
         next(err);
     }
 };
@@ -18,6 +19,7 @@ export const getBooking = async (req: Request, res: Response, next: NextFunction
         if (!booking) return res.status(404).json({ error: "Booking not found" });
         res.json(booking);
     } catch (err) {
+        console.error("[Booking Controller] getBooking Error:", err);
         next(err);
     }
 };
@@ -27,6 +29,7 @@ export const createBooking = async (req: Request, res: Response, next: NextFunct
         const booking = await bookingService.createBooking(req.body);
         res.status(201).json(booking);
     } catch (err) {
+        console.error("[Booking Controller] createBooking Error:", err);
         // Conflict errors (double-booking) surface as 409
         if (err instanceof Error && err.message.includes("no longer available")) {
             return res.status(409).json({ error: err.message });
@@ -40,6 +43,7 @@ export async function cancelBooking(req: Request, res: Response, next: NextFunct
         const booking = await bookingService.cancelBooking(req.params.id as string);
         res.json(booking);
     } catch (err) {
+        console.error("[Booking Controller] cancelBooking Error:", err);
         next(err);
     }
 }
@@ -49,6 +53,7 @@ export async function deleteBooking(req: Request, res: Response, next: NextFunct
         await bookingService.deleteBooking(req.params.id as string);
         res.status(204).send();
     } catch (err) {
+        console.error("[Booking Controller] deleteBooking Error:", err);
         next(err);
     }
 }

@@ -74,7 +74,8 @@ export default function BookingPage() {
 
             router.push(`/confirmation?slug=${slug}&date=${start.toISOString()}&name=${encodeURIComponent(name)}`);
         } catch (err) {
-            alert("Booking failed. Please try again.");
+            console.error("Booking Error:", err);
+            alert(`Booking failed. ${err instanceof Error ? err.message : "Please try again."}`);
             setSubmitting(false);
         }
     }
@@ -100,10 +101,10 @@ export default function BookingPage() {
 
     return (
         <div className="min-h-screen bg-[color:var(--background)] sm:bg-[color:var(--secondary)]/30 py-12 px-4 flex items-center justify-center font-sans relative">
-            <div className="max-w-4xl w-full bg-[color:var(--card)] rounded-3xl sm:shadow-2xl sm:border border-[color:var(--border)] overflow-hidden flex flex-col md:flex-row min-h-[500px] animate-in zoom-in-95 duration-500">
+            <div className={`w-full bg-[color:var(--card)] rounded-2xl sm:shadow-xl sm:border border-[color:var(--border)] overflow-hidden flex flex-col md:flex-row min-h-[440px] animate-in zoom-in-95 duration-500 transition-all ${((date && step === "calendar") || step === "form") ? "max-w-4xl" : "max-w-3xl"}`}>
 
                 {/* Left Side: Event Details */}
-                <div className="w-full md:w-[360px] p-8 border-b md:border-b-0 md:border-r border-[color:var(--border)] bg-[color:var(--card)] z-10">
+                <div className="w-full md:w-[280px] p-6 border-b md:border-b-0 md:border-r border-[color:var(--border)] bg-[color:var(--card)] z-10 shrink-0">
                     {step === "form" && (
                         <button
                             onClick={() => setStep("calendar")}
@@ -115,11 +116,11 @@ export default function BookingPage() {
 
                     <div className="space-y-6">
                         <div>
-                            <div className="w-12 h-12 bg-[color:var(--primary)] rounded-xl flex items-center justify-center mb-6 shadow-md">
-                                <span className="text-[color:var(--primary-foreground)] text-xl font-bold leading-none">C</span>
+                            <div className="w-10 h-10 bg-[color:var(--primary)] rounded-xl flex items-center justify-center mb-4 shadow-md">
+                                <span className="text-[color:var(--primary-foreground)] text-lg font-bold leading-none">C</span>
                             </div>
-                            <p className="text-[color:var(--muted-foreground)] text-sm font-medium mb-1">Cal Host</p>
-                            <h1 className="text-2xl font-bold leading-tight">{event.title}</h1>
+                            <p className="text-[color:var(--muted-foreground)] text-xs font-medium mb-0.5">Cal Host</p>
+                            <h1 className="text-xl font-bold leading-tight">{event.title}</h1>
                         </div>
 
                         <div className="space-y-4 text-[color:var(--muted-foreground)] font-medium text-sm">
@@ -158,8 +159,8 @@ export default function BookingPage() {
                 <div className="flex-1 bg-[color:var(--background)] p-8 relative">
                     {step === "calendar" ? (
                         <div className="h-full flex flex-col md:flex-row gap-8 animate-in fade-in slide-in-from-right-8 duration-500">
-                            <div className="flex-1">
-                                <h2 className="text-lg font-semibold mb-6">Select a Date & Time</h2>
+                            <div className="flex-1 max-w-xs mx-auto w-full">
+                                <h2 className="text-base font-semibold mb-4">Select a Date & Time</h2>
                                 <Calendar
                                     selectedDate={date}
                                     onSelect={(d) => setDate(d)}

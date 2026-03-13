@@ -30,6 +30,12 @@ export async function getEventTypes() {
     return res.json();
 }
 
+export async function getEventTypeById(id: string) {
+    const res = await fetch(`${API}/event-types/${id}`, { cache: 'no-store' });
+    if (!res.ok) throw new Error("Failed to fetch event type");
+    return res.json();
+}
+
 export async function createEventType(data: any) {
     const res = await fetch(`${API}/event-types`, {
         method: "POST",
@@ -92,5 +98,15 @@ export async function updateAvailability(data: any) {
         body: JSON.stringify(data),
     });
     if (!res.ok) throw new Error("Failed to update availability");
+    return res.json();
+}
+
+export async function updateTimezone(timezone: string) {
+    const res = await fetch(`${API}/availability/timezone`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ timezone }),
+    });
+    if (!res.ok) throw new Error("Failed to update timezone");
     return res.json();
 }

@@ -29,7 +29,7 @@ export function Calendar({ selectedDate, onSelect }: CalendarProps) {
     };
 
     return (
-        <div className="w-full">
+        <div className="w-full max-w-sm mx-auto">
             <div className="flex items-center justify-between mb-4">
                 <h2 className="font-semibold">{format(currentMonth, "MMMM yyyy")}</h2>
                 <div className="flex gap-2 text-[color:var(--muted-foreground)]">
