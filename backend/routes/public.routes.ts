@@ -1,6 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express";
 import * as eventTypeService from "../services/event-type.service";
 import { getAvailableSlots } from "../services/slot.service";
+import { createBooking } from "../controllers/booking.controller";
 
 const router = Router();
 
@@ -58,5 +59,11 @@ router.get(
         }
     }
 );
+
+/**
+ * POST /api/public/book
+ * Public endpoint to create a new booking.
+ */
+router.post("/book", createBooking);
 
 export { router as publicRoutes };

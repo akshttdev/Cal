@@ -18,7 +18,10 @@ export async function createBooking(data: any) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
     });
-    if (!res.ok) throw new Error("Booking failed");
+    if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error || "Booking failed");
+    }
     return res.json();
 }
 
